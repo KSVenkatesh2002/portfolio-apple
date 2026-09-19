@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply m-0 p-0 overflow-hidden font-sans text-white bg-macOS-bg;
+    /* Prevent text selection and add native feel */
+    user-select: none;
+    -webkit-user-select: none; 
+    /* The custom macOS wallpaper will be applied later via an img or div */
+  }
+
+  /* Custom scrollbar for inner windows */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent; 
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2); 
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.4); 
+  }
+}
