@@ -9,21 +9,45 @@ const MailApp = ({ inMobileMode }) => {
   const [isSent, setIsSent] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!message) return;
-    
-    // Open mailto link as fallback
-    const mailtoUrl = `mailto:kotavenkatesh2002@gmail.com?subject=${encodeURIComponent(subject || 'Job Opportunity / Portfolio Inquiry')}&body=${encodeURIComponent(`From: ${senderEmail}\n\n${message}`)}`;
-    window.location.href = mailtoUrl;
+  const [isSending, setIsSending] = useState(false);
 
-    setIsSent(true);
-    setTimeout(() => {
-      setIsSent(false);
-      setSubject('');
-      setMessage('');
-      setSenderEmail('');
-    }, 4000);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!message || !senderEmail) return;
+    
+    setIsSending(true);
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: "c5b19d8a-4871-4e2f-afbc-ae08eedf5260",
+          subject: subject || 'Portfolio Inquiry from ' + senderEmail,
+          from_name: senderEmail,
+          email: senderEmail,
+          message: message,
+        }),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        setIsSent(true);
+        setTimeout(() => {
+          setIsSent(false);
+          setSubject('');
+          setMessage('');
+          setSenderEmail('');
+        }, 4000);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsSending(false);
+    }
   };
 
   const handleCopyEmail = () => {
@@ -115,8 +139,8 @@ const MailApp = ({ inMobileMode }) => {
           {isSent ? (
             <div className="bg-emerald-500/20 border border-emerald-500/40 rounded-xl p-4 text-center space-y-1">
               <CheckCircle2 size={32} className="text-emerald-400 mx-auto" />
-              <h4 className="text-sm font-bold text-white">Message Prepared!</h4>
-              <p className="text-xs text-white/70">Opening mail client...</p>
+              <h4 className="text-sm font-bold text-white">Message Sent!</h4>
+              <p className="text-xs text-white/70">I will get back to you shortly.</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-3">
@@ -158,10 +182,11 @@ const MailApp = ({ inMobileMode }) => {
 
               <button
                 type="submit"
-                className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs rounded-xl shadow-md flex items-center justify-center gap-2 cursor-pointer"
+                disabled={isSending}
+                className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 disabled:bg-blue-600/50 text-white font-semibold text-xs rounded-xl shadow-md flex items-center justify-center gap-2 cursor-pointer transition-all"
               >
                 <Send size={14} />
-                <span>Send Message</span>
+                <span>{isSending ? 'Sending...' : 'Send Message'}</span>
               </button>
             </form>
           )}
@@ -272,8 +297,8 @@ const MailApp = ({ inMobileMode }) => {
           {isSent ? (
             <div className="bg-emerald-500/20 border border-emerald-500/40 rounded-2xl p-6 text-center space-y-2">
               <CheckCircle2 size={40} className="text-emerald-400 mx-auto" />
-              <h3 className="text-lg font-bold text-white">Message Prepared!</h3>
-              <p className="text-xs text-white/70">Opening your mail client to send email to Venkatesh.</p>
+              <h3 className="text-lg font-bold text-white">Message Sent!</h3>
+              <p className="text-xs text-white/70">Thank you for reaching out. I will get back to you shortly.</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -315,10 +340,11 @@ const MailApp = ({ inMobileMode }) => {
 
               <button
                 type="submit"
-                className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs rounded-xl shadow-lg flex items-center justify-center gap-2 transition-all active:scale-[0.99] cursor-pointer"
+                disabled={isSending}
+                className="w-full py-3 bg-blue-600 hover:bg-blue-500 disabled:bg-blue-600/50 text-white font-semibold text-xs rounded-xl shadow-lg flex items-center justify-center gap-2 transition-all active:scale-[0.99] cursor-pointer"
               >
                 <Send size={14} />
-                <span>Send Message to Venkatesh</span>
+                <span>{isSending ? 'Sending Message...' : 'Send Message to Venkatesh'}</span>
               </button>
             </form>
           )}

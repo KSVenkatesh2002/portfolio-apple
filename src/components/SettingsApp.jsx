@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Search, Briefcase, Code, GraduationCap, User, Download, CheckCircle2, Award, Mail, Phone, MapPin, ExternalLink } from 'lucide-react';
 import Window from './Window';
+import { X, ExternalLink as ExternalLinkIcon } from 'lucide-react';
 
 const resumeCategories = [
-  { id: 'experience', name: 'Internship', icon: Briefcase, color: 'bg-blue-500' },
+  { id: 'experience', name: 'Experience', icon: Briefcase, color: 'bg-blue-500' },
   { id: 'skills', name: 'Technical Skills', icon: Code, color: 'bg-purple-500' },
   { id: 'education', name: 'Education & Certs', icon: GraduationCap, color: 'bg-emerald-500' },
   { id: 'summary', name: 'Profile Summary', icon: User, color: 'bg-amber-500' },
@@ -41,11 +42,45 @@ const skillsWithLogos = {
   ]
 };
 
+const experiences = [
+  {
+    id: 1,
+    role: 'Web App Developer',
+    company: 'Fueint Technology',
+    period: 'Mar 2025 – Present',
+    location: 'Coimbatore',
+    bullets: [
+      'Developed and maintained web applications including Shrivalu (React).',
+      'Worked on WordPress projects including Unbounce and Insightly.',
+    ],
+    tech: ['React', 'WordPress', 'Web Development', 'Responsive UI']
+  },
+  {
+    id: 2,
+    role: 'Next.js Frontend Intern',
+    company: 'CTSV Solution',
+    period: 'Nov 2024 – Feb 2025',
+    location: 'Coimbatore',
+    bullets: [
+      'Developed and modified frontend components using Next.js and React.',
+      'Integrated REST APIs to fetch and render dynamic data in UI components.',
+      'Implemented client-side authentication and route protection.',
+      'Improved UI responsiveness across mobile and desktop devices.'
+    ],
+    tech: ['Next.js', 'React', 'REST APIs', 'Authentication', 'Route Protection', 'Responsive UI']
+  }
+];
+
 const SettingsApp = ({ inMobileMode }) => {
   const [activeTab, setActiveTab] = useState('experience');
   const [searchQuery, setSearchQuery] = useState('');
+  const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
 
   const RESUME_URL = 'https://1drv.ms/b/c/62249dcca8dcf6f9/IQBeZToGz7iVTZ7tPduUXiYmAZ8zMVF_hCZrxwtV5Exki1A?e=uOnpxh';
+
+  const handleOpenResumeModal = () => {
+    setIsResumeModalOpen(true);
+  };
 
   const handleDownloadResume = () => {
     window.open(RESUME_URL, '_blank', 'noopener,noreferrer');
@@ -58,54 +93,55 @@ const SettingsApp = ({ inMobileMode }) => {
           <div className="p-4 md:p-6 space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
               <div>
-                <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">Internship</h2>
-                <p className="text-xs md:text-sm text-white/60">Professional Frontend Internship</p>
+                <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">Experience</h2>
+                <p className="text-xs md:text-sm text-white/60">Professional Experience & Internships</p>
               </div>
               <span className="px-3 py-1 bg-blue-500/20 text-blue-300 border border-blue-500/30 text-xs font-semibold rounded-full">
-                Next.js Frontend Intern
+                {experiences.length} Roles
               </span>
             </div>
 
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-5 md:p-6 backdrop-blur-md shadow-xl space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-white/10 gap-2">
-                <div>
-                  <h3 className="text-lg md:text-xl font-bold text-white flex items-center gap-2">
-                    <Briefcase className="text-blue-400 shrink-0" size={20} />
-                    Next.js Frontend Intern
-                  </h3>
-                  <p className="text-blue-300 font-medium text-xs md:text-sm mt-0.5">CTSV Solution</p>
-                </div>
-                <div>
-                  <span className="inline-block px-2.5 py-1 bg-white/10 text-white/90 text-xs font-mono rounded-md">
-                    Nov 2024 – Feb 2025
-                  </span>
-                  <p className="text-xs text-white/50 mt-1 flex items-center gap-1">
-                    <MapPin size={12} /> Coimbatore
-                  </p>
-                </div>
-              </div>
+            <div className="space-y-6">
+              {experiences.map((exp) => (
+                <div key={exp.id} className="bg-white/5 border border-white/10 rounded-2xl p-5 md:p-6 backdrop-blur-md shadow-xl space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-start md:items-center justify-between pb-4 border-b border-white/10 gap-3">
+                    <div>
+                      <h3 className="text-lg md:text-xl font-bold text-white flex items-center gap-2">
+                        <Briefcase className="text-blue-400 shrink-0" size={20} />
+                        {exp.role}
+                      </h3>
+                      <p className="text-blue-300 font-medium text-xs md:text-sm mt-0.5">{exp.company}</p>
+                    </div>
+                    <div className="flex flex-col sm:items-end gap-1.5">
+                      <span className="inline-block px-2.5 py-1 bg-white/10 text-white/90 text-xs font-mono rounded-md whitespace-nowrap">
+                        {exp.period}
+                      </span>
+                      {exp.location && (
+                        <p className="text-xs text-white/50 flex items-center gap-1 justify-start sm:justify-end">
+                          <MapPin size={12} /> {exp.location}
+                        </p>
+                      )}
+                    </div>
+                  </div>
 
-              <ul className="space-y-3">
-                {[
-                  'Developed and modified frontend components using Next.js and React.',
-                  'Integrated REST APIs to fetch and render dynamic data in UI components.',
-                  'Implemented client-side authentication and route protection.',
-                  'Improved UI responsiveness across mobile and desktop devices.'
-                ].map((bullet, idx) => (
-                  <li key={idx} className="flex items-start gap-2.5 text-xs md:text-sm text-white/80 leading-relaxed">
-                    <CheckCircle2 className="text-blue-400 shrink-0 mt-0.5" size={15} />
-                    <span>{bullet}</span>
-                  </li>
-                ))}
-              </ul>
+                  <ul className="space-y-3">
+                    {exp.bullets.map((bullet, idx) => (
+                      <li key={idx} className="flex items-start gap-2.5 text-xs md:text-sm text-white/80 leading-relaxed">
+                        <CheckCircle2 className="text-blue-400 shrink-0 mt-0.5" size={15} />
+                        <span>{bullet}</span>
+                      </li>
+                    ))}
+                  </ul>
 
-              <div className="pt-3 border-t border-white/10 flex flex-wrap gap-1.5">
-                {['Next.js', 'React', 'REST APIs', 'Authentication', 'Route Protection', 'Responsive UI'].map((tech) => (
-                  <span key={tech} className="px-2.5 py-1 bg-white/10 text-white/80 text-[11px] font-medium rounded-lg border border-white/5">
-                    {tech}
-                  </span>
-                ))}
-              </div>
+                  <div className="pt-3 border-t border-white/10 flex flex-wrap gap-1.5">
+                    {exp.tech.map((tech) => (
+                      <span key={tech} className="px-2.5 py-1 bg-white/10 text-white/80 text-[11px] font-medium rounded-lg border border-white/5">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         );
@@ -324,7 +360,7 @@ const SettingsApp = ({ inMobileMode }) => {
 
         <div className="flex items-center space-x-3">
           <button 
-            onClick={handleDownloadResume}
+            onClick={handleOpenResumeModal}
             className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-3.5 py-1.5 rounded-lg shadow-md transition-all active:scale-95 cursor-pointer"
           >
             <Download size={14} />
@@ -371,6 +407,47 @@ const SettingsApp = ({ inMobileMode }) => {
           {renderContent()}
         </div>
       </div>
+
+      {/* Resume Modal */}
+      {isResumeModalOpen && (
+        <div className="absolute inset-0 z-50 bg-black/60 backdrop-blur-sm flex flex-col items-center justify-center p-4 md:p-10 animate-in fade-in duration-200">
+          <div className="bg-macOS-bg border border-white/20 shadow-2xl rounded-2xl w-full h-full max-w-4xl flex flex-col overflow-hidden relative animate-in zoom-in-95 duration-200">
+            {/* Modal Header */}
+            <div className="h-12 bg-black/40 border-b border-white/10 flex items-center justify-between px-4 shrink-0">
+              <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                VENKATESH_K_S.pdf
+              </h3>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleDownloadResume}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-lg transition-colors cursor-pointer"
+                >
+                  <ExternalLinkIcon size={14} />
+                  <span>Open in New Tab</span>
+                </button>
+                <button
+                  onClick={() => setIsResumeModalOpen(false)}
+                  className="p-1.5 hover:bg-white/10 text-white/70 hover:text-white rounded-lg transition-colors cursor-pointer"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+            </div>
+            
+            {/* Modal Body (Iframe) */}
+            <div className="flex-1 bg-white relative w-full h-full">
+              <iframe 
+                src={RESUME_URL} 
+                className="w-full h-full border-none"
+                title="Resume PDF"
+              />
+              <div className="absolute inset-0 pointer-events-none flex items-center justify-center text-black/50 text-sm font-medium -z-10">
+                Loading Document...
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 
