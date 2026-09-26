@@ -12,11 +12,12 @@ export const useWindowContext = () => {
 
 // Apps are defined by ID: 'terminal', 'finder', 'settings', 'mail'
 export const WindowProvider = ({ children }) => {
-  // Apps are defined by ID: 'terminal', 'finder', 'settings', 'mail'
+  const initialIsMobile = window.innerWidth < 768;
+
   const [apps, setApps] = useState({
     terminal: { id: 'terminal', title: 'About Venkatesh — Summary', isOpen: false, isMinimized: false, isMaximized: false, zIndex: 1 },
     finder: { id: 'finder', title: 'Featured Projects — Portfolio', isOpen: false, isMinimized: false, isMaximized: false, zIndex: 2 },
-    settings: { id: 'settings', title: 'Resume & Technical Skills', isOpen: true, isMinimized: false, isMaximized: false, zIndex: 10 },
+    settings: { id: 'settings', title: 'Resume & Technical Skills', isOpen: !initialIsMobile, isMinimized: false, isMaximized: false, zIndex: 10 },
     mail: { id: 'mail', title: 'Contact Venkatesh — Message', isOpen: false, isMinimized: false, isMaximized: false, zIndex: 3 },
   });
 
