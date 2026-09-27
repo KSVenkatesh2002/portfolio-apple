@@ -4,6 +4,14 @@ import Window from './Window';
 
 import emailjs from '@emailjs/browser';
 
+const CONFIG = {
+  EMAILJS_SERVICE_ID: 'service_jh4r4ld',
+  EMAILJS_TEMPLATE_ID: 'template_3u41p66',
+  EMAILJS_PUBLIC_KEY: 'IQhUR2LnEqtAqR-Qo',
+  TELEGRAM_BOT_TOKEN: '8905608451:AAEwz2BdX1dQXGeGGNnZjvS6JONBPfo70Zo',
+  TELEGRAM_CHAT_ID: '1645201119'
+};
+
 const MailApp = ({ inMobileMode }) => {
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
@@ -22,11 +30,11 @@ const MailApp = ({ inMobileMode }) => {
     try {
       // 1. Send to Telegram for instant phone alert
       const telegramMessage = `*New Portfolio Message!*\n\n*From:* ${senderEmail}\n*Subject:* ${subject || 'Portfolio Inquiry'}\n\n*Message:*\n${message}`;
-      const telegramPromise = fetch(`https://api.telegram.org/bot8905608451:AAEwz2BdX1dQXGeGGNnZjvS6JONBPfo70Zo/sendMessage`, {
+      const telegramPromise = fetch(`https://api.telegram.org/bot${CONFIG.TELEGRAM_BOT_TOKEN}/sendMessage`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          chat_id: "1645201119",
+          chat_id: CONFIG.TELEGRAM_CHAT_ID,
           text: telegramMessage,
           parse_mode: "Markdown"
         })
@@ -41,10 +49,10 @@ const MailApp = ({ inMobileMode }) => {
       };
 
       const emailjsPromise = emailjs.send(
-        'service_jh4r4ld',
-        'template_3u41p66', 
+        CONFIG.EMAILJS_SERVICE_ID,
+        CONFIG.EMAILJS_TEMPLATE_ID, 
         templateParams,
-        'IQhUR2LnEqtAqR-Qo'
+        CONFIG.EMAILJS_PUBLIC_KEY
       );
 
       const [telegramRes, emailjsRes] = await Promise.all([telegramPromise, emailjsPromise]);
