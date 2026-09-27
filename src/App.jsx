@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useWindowContext } from './contexts/WindowContext';
 import TopMenuBar from './components/TopMenuBar';
 import Dock from './components/Dock';
@@ -11,10 +11,11 @@ import MailApp from './components/MailApp';
 import backgroundImg from './assets/background.jpg';
 import meImg from './assets/me.png';
 
-import { FileText, Briefcase, User, Mail, Download, MapPin } from 'lucide-react';
+import { FileText, Briefcase, User, Mail, Download, MapPin, Maximize2, X } from 'lucide-react';
 
 function App() {
   const { isMobile, openApp } = useWindowContext();
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
 
   const RESUME_URL = 'https://1drv.ms/b/c/62249dcca8dcf6f9/IQBeZToGz7iVTZ7tPduUXiYmAZ8zMVF_hCZrxwtV5Exki1A?e=uOnpxh';
 
@@ -86,8 +87,14 @@ function App() {
           {/* Big Profile Photo on Top */}
           <div className="relative w-full h-96 overflow-hidden group">
             <img src={meImg} alt="Venkatesh K S" className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
-            <div className="absolute bottom-3 left-4 right-4">
+            <button 
+              onClick={() => setIsImageModalOpen(true)}
+              className="absolute top-3 right-3 p-1.5 bg-black/40 hover:bg-black/70 text-white/80 hover:text-white rounded-lg backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all z-10 cursor-pointer border border-white/20 shadow-md"
+            >
+              <Maximize2 size={16} />
+            </button>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none" />
+            <div className="absolute bottom-3 left-4 right-4 pointer-events-none">
               <h3 className="text-lg font-bold tracking-tight text-white drop-shadow-md">Venkatesh K S</h3>
               <p className="text-xs text-blue-300 font-medium">MERN Stack / React Developer</p>
               <p className="text-[11px] text-white/70 flex items-center gap-1 mt-0.5">
@@ -160,6 +167,18 @@ function App() {
 
           <Dock />
         </>
+      )}
+      {/* Full Screen Image Modal */}
+      {isImageModalOpen && (
+        <div className="absolute inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <button 
+            onClick={() => setIsImageModalOpen(false)}
+            className="absolute top-6 right-6 p-2 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 rounded-xl backdrop-blur-md transition-colors cursor-pointer"
+          >
+            <X size={24} />
+          </button>
+          <img src={meImg} alt="Venkatesh K S" className="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl animate-in zoom-in-95 duration-200" />
+        </div>
       )}
     </div>
   );

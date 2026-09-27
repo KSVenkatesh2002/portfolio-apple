@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FileText, Briefcase, User, Mail, ChevronLeft, Battery, Wifi, Signal, Download, MapPin } from 'lucide-react';
+import { FileText, Briefcase, User, Mail, ChevronLeft, Battery, Wifi, Signal, Download, MapPin, Maximize2, X } from 'lucide-react';
 import { format } from 'date-fns';
 import { useWindowContext } from '../contexts/WindowContext';
 
@@ -19,6 +19,7 @@ const appsData = [
 const MobileView = () => {
   const { openApp, closeApp, apps } = useWindowContext();
   const [time, setTime] = useState(new Date());
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   
   React.useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000);
@@ -91,8 +92,14 @@ const MobileView = () => {
       {/* HR Greeting Card */}
       <div className="mx-5 mt-4 p-4 bg-black/40 border border-white/15 rounded-3xl backdrop-blur-xl shadow-lg space-y-3">
         <div className="flex items-center space-x-3">
-          <div className="w-14 h-14 rounded-2xl overflow-hidden border border-white/30 shrink-0">
+          <div className="relative w-14 h-14 rounded-2xl overflow-hidden border border-white/30 shrink-0 group">
             <img src={meImg} alt="VENKATESH K S" className="w-full h-full object-cover" />
+            <button 
+              onClick={() => setIsImageModalOpen(true)}
+              className="absolute inset-0 bg-black/40 flex items-center justify-center text-white opacity-0 active:opacity-100 transition-opacity"
+            >
+              <Maximize2 size={16} />
+            </button>
           </div>
           <div>
             <h2 className="text-base font-bold">VENKATESH K S</h2>
@@ -148,6 +155,18 @@ const MobileView = () => {
            </div>
         ))}
       </div>
+      {/* Full Screen Image Modal */}
+      {isImageModalOpen && (
+        <div className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-4 animate-in fade-in duration-200">
+          <button 
+            onClick={() => setIsImageModalOpen(false)}
+            className="absolute top-10 right-6 p-2 text-white bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-md transition-colors cursor-pointer z-50"
+          >
+            <X size={24} />
+          </button>
+          <img src={meImg} alt="Venkatesh K S" className="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl animate-in zoom-in-95 duration-200" />
+        </div>
+      )}
     </div>
   );
 };
