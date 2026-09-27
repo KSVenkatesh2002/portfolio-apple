@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Send, CheckCircle2, Github, Linkedin, Copy, Globe } from 'lucide-react';
 import Window from './Window';
 
+import emailjs from '@emailjs/browser';
+
 const MailApp = ({ inMobileMode }) => {
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
@@ -18,23 +20,36 @@ const MailApp = ({ inMobileMode }) => {
     setIsSending(true);
 
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
+      // 1. Send to Telegram for instant phone alert
+      const telegramMessage = `*New Portfolio Message!*\n\n*From:* ${senderEmail}\n*Subject:* ${subject || 'Portfolio Inquiry'}\n\n*Message:*\n${message}`;
+      const telegramPromise = fetch(`https://api.telegram.org/bot8905608451:AAEwz2BdX1dQXGeGGNnZjvS6JONBPfo70Zo/sendMessage`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          access_key: "c5b19d8a-4871-4e2f-afbc-ae08eedf5260",
-          subject: subject || 'Portfolio Inquiry from ' + senderEmail,
-          from_name: senderEmail,
-          email: senderEmail,
-          message: message,
-        }),
+          chat_id: "1645201119",
+          text: telegramMessage,
+          parse_mode: "Markdown"
+        })
       });
 
-      const result = await response.json();
-      if (result.success) {
+      // 2. Send via EmailJS
+      const templateParams = {
+        name: senderEmail,
+        email: senderEmail,
+        message: message,
+        subject: subject || 'Portfolio Inquiry',
+      };
+
+      const emailjsPromise = emailjs.send(
+        'service_jh4r4ld',
+        'template_3u41p66', 
+        templateParams,
+        'IQhUR2LnEqtAqR-Qo'
+      );
+
+      const [telegramRes, emailjsRes] = await Promise.all([telegramPromise, emailjsPromise]);
+      
+      if (emailjsRes.status === 200 || telegramRes.ok) {
         setIsSent(true);
         setTimeout(() => {
           setIsSent(false);
