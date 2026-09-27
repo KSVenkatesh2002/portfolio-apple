@@ -7,7 +7,7 @@ import TerminalApp from './TerminalApp';
 import FinderApp from './FinderApp';
 import SettingsApp from './SettingsApp';
 import MailApp from './MailApp';
-import meImg from '../assets/me.jpg';
+import meImg from '../assets/me.png';
 
 const appsData = [
   { id: 'settings', icon: FileText, label: 'Resume', color: 'bg-blue-600 text-white' },

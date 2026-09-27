@@ -9,7 +9,7 @@ import FinderApp from './components/FinderApp';
 import SettingsApp from './components/SettingsApp';
 import MailApp from './components/MailApp';
 import backgroundImg from './assets/background.jpg';
-import meImg from './assets/me.jpg';
+import meImg from './assets/me.png';
 
 import { FileText, Briefcase, User, Mail, Download, MapPin } from 'lucide-react';
 

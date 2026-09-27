@@ -6,7 +6,7 @@ import emailjs from '@emailjs/browser';
 import { CONFIG } from '../config';
 
 const MailApp = ({ inMobileMode }) => {
-  const [subject, setSubject] = useState('');
+  const [subject, setSubject] = useState('Portfolio Inquiry');
   const [message, setMessage] = useState('');
   const [senderEmail, setSenderEmail] = useState('');
   const [isSent, setIsSent] = useState(false);
@@ -22,14 +22,13 @@ const MailApp = ({ inMobileMode }) => {
 
     try {
       // 1. Send to Telegram for instant phone alert
-      const telegramMessage = `*New Portfolio Message!*\n\n*From:* ${senderEmail}\n*Subject:* ${subject || 'Portfolio Inquiry'}\n\n*Message:*\n${message}`;
+      const telegramMessage = `🚨 NEW PORTFOLIO MESSAGE 🚨\n\nFrom: ${senderEmail}\nSubject: ${subject || 'Portfolio Inquiry'}\n\nMessage:\n${message}`;
       const telegramPromise = fetch(`https://api.telegram.org/bot${CONFIG.TELEGRAM_BOT_TOKEN}/sendMessage`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           chat_id: CONFIG.TELEGRAM_CHAT_ID,
-          text: telegramMessage,
-          parse_mode: "Markdown"
+          text: telegramMessage
         })
       });
 
@@ -54,7 +53,7 @@ const MailApp = ({ inMobileMode }) => {
         setIsSent(true);
         setTimeout(() => {
           setIsSent(false);
-          setSubject('');
+          setSubject('Portfolio Inquiry');
           setMessage('');
           setSenderEmail('');
         }, 4000);
@@ -179,6 +178,7 @@ const MailApp = ({ inMobileMode }) => {
                   placeholder="Job Opportunity"
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
+                  onFocus={(e) => e.target.select()}
                   className="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
                   required
                 />
@@ -337,6 +337,7 @@ const MailApp = ({ inMobileMode }) => {
                   placeholder="Job Opportunity / Interview Invitation"
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
+                  onFocus={(e) => e.target.select()}
                   className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:ring-1 focus:ring-blue-500 placeholder-white/30"
                   required
                 />
