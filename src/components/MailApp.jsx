@@ -3,14 +3,7 @@ import { Mail, Phone, MapPin, Send, CheckCircle2, Github, Linkedin, Copy, Globe 
 import Window from './Window';
 
 import emailjs from '@emailjs/browser';
-
-const CONFIG = {
-  EMAILJS_SERVICE_ID: 'service_jh4r4ld',
-  EMAILJS_TEMPLATE_ID: 'template_3u41p66',
-  EMAILJS_PUBLIC_KEY: 'IQhUR2LnEqtAqR-Qo',
-  TELEGRAM_BOT_TOKEN: '8905608451:AAEwz2BdX1dQXGeGGNnZjvS6JONBPfo70Zo',
-  TELEGRAM_CHAT_ID: '1645201119'
-};
+import { CONFIG } from '../config';
 
 const MailApp = ({ inMobileMode }) => {
   const [subject, setSubject] = useState('');
