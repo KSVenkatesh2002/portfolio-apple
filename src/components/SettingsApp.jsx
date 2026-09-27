@@ -74,13 +74,8 @@ const experiences = [
 const SettingsApp = ({ inMobileMode }) => {
   const [activeTab, setActiveTab] = useState('experience');
   const [searchQuery, setSearchQuery] = useState('');
-  const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
 
   const RESUME_URL = 'https://1drv.ms/b/c/62249dcca8dcf6f9/IQBeZToGz7iVTZ7tPduUXiYmAZ8zMVF_hCZrxwtV5Exki1A?e=uOnpxh';
-
-  const handleOpenResumeModal = () => {
-    setIsResumeModalOpen(true);
-  };
 
   const handleDownloadResume = () => {
     window.open(RESUME_URL, '_blank', 'noopener,noreferrer');
@@ -360,7 +355,7 @@ const SettingsApp = ({ inMobileMode }) => {
 
         <div className="flex items-center space-x-3">
           <button 
-            onClick={handleOpenResumeModal}
+            onClick={handleDownloadResume}
             className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-3.5 py-1.5 rounded-lg shadow-md transition-all active:scale-95 cursor-pointer"
           >
             <Download size={14} />
@@ -407,47 +402,6 @@ const SettingsApp = ({ inMobileMode }) => {
           {renderContent()}
         </div>
       </div>
-
-      {/* Resume Modal */}
-      {isResumeModalOpen && (
-        <div className="absolute inset-0 z-50 bg-black/60 backdrop-blur-sm flex flex-col items-center justify-center p-4 md:p-10 animate-in fade-in duration-200">
-          <div className="bg-macOS-bg border border-white/20 shadow-2xl rounded-2xl w-full h-full max-w-4xl flex flex-col overflow-hidden relative animate-in zoom-in-95 duration-200">
-            {/* Modal Header */}
-            <div className="h-12 bg-black/40 border-b border-white/10 flex items-center justify-between px-4 shrink-0">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                VENKATESH_K_S.pdf
-              </h3>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={handleDownloadResume}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-lg transition-colors cursor-pointer"
-                >
-                  <ExternalLinkIcon size={14} />
-                  <span>Open in New Tab</span>
-                </button>
-                <button
-                  onClick={() => setIsResumeModalOpen(false)}
-                  className="p-1.5 hover:bg-white/10 text-white/70 hover:text-white rounded-lg transition-colors cursor-pointer"
-                >
-                  <X size={18} />
-                </button>
-              </div>
-            </div>
-            
-            {/* Modal Body (Iframe) */}
-            <div className="flex-1 bg-white relative w-full h-full">
-              <iframe 
-                src={RESUME_URL} 
-                className="w-full h-full border-none"
-                title="Resume PDF"
-              />
-              <div className="absolute inset-0 pointer-events-none flex items-center justify-center text-black/50 text-sm font-medium -z-10">
-                Loading Document...
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 
